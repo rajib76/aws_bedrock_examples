@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Id": "default",
+  "Statement": [
+    {
+      "Sid": "lambdaaccessagent",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "bedrock.amazonaws.com"
+      },
+      "Action": "lambda:InvokeFunction",
+      "Resource": "arn:aws:lambda:us-east-1:643045476917:function:preprocess-lambda",
+      "Condition": {
+        "ArnLike": {
+          "AWS:SourceArn": "arn:aws:bedrock:us-east-1:643045476917:agent/S4IDD2S9JD"
+        }
+      }
+    }
+  ]
+}

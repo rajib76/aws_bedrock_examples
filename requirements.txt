@@ -1,5 +1,4 @@
-boto3~=1.28.66
-langchain
-botocore
+boto3==1.33.8
+botocore==1.33.8
 python-dotenv~=1.0.0
 openai==0.28.1

@@ -36,11 +36,11 @@ OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 
 def get_llm_instance():
     # initialize LLM (we use ChatOpenAI because we'll later define a `chat` agent)
-    llm = ChatOpenAI(
-        openai_api_key=OPENAI_API_KEY,
-        temperature=0,
-        model_name='gpt-3.5-turbo'
-    )
+    # llm = ChatOpenAI(
+    #     openai_api_key=OPENAI_API_KEY,
+    #     temperature=0,
+    #     model_name='gpt-3.5-turbo'
+    # )
 
     # llm = Bedrock(
     #     credentials_profile_name="default", model_id="cohere.command-text-v14"
@@ -49,6 +49,8 @@ def get_llm_instance():
     # llm = Bedrock(
     #     credentials_profile_name="default", model_id="anthropic.claude-v2"
     # )
+
+    llm = Bedrock(credentials_profile_name="default", model_id="meta.llama2-13b-chat-v1")
 
 
     #
