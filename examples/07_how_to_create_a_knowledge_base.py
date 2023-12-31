@@ -1,6 +1,7 @@
 # The trust relation and all the permission policies for the role used in this program
 # is provided in the readme
 import logging
+import time
 
 import boto3
 from botocore.client import BaseClient
@@ -120,6 +121,31 @@ class BedrockKBAgent():
 
         return response
 
+    def start_ingestion_job(self,kb_id,ds_id):
+        client = self._return_aws_service_client(run_time=False)
+        response = client.start_ingestion_job(
+            knowledgeBaseId=kb_id,
+            dataSourceId=ds_id,
+            description='Job to sync knowledge base'
+        )
+        print("submitted ", response)
+        ingestion_job_id = response["ingestionJob"]["ingestionJobId"]
+        print("job id ",ingestion_job_id )
+
+        while True:
+            job_status = client.get_ingestion_job(
+                knowledgeBaseId=kb_id,
+                dataSourceId=ds_id,
+                ingestionJobId=ingestion_job_id
+            )
+            print("job_status ", job_status)
+            status = job_status["ingestionJob"]["status"]
+            if status in ['COMPLETE','FAILED']:
+                break
+            else:
+                time.sleep(2)
+
+
 
 if __name__ == "__main__":
     kb = BedrockKBAgent()
@@ -135,4 +161,9 @@ if __name__ == "__main__":
     response_ds = kb.create_ds(knowledge_base_id=kb_id,
                                bucket_arn="arn:aws:s3:::bedrock-agent01")
     print(response_ds)
+
+    ds_id = response_ds["dataSource"]["dataSourceId"]
+
+    kb.start_ingestion_job(kb_id=kb_id,
+                           ds_id=ds_id)
 
