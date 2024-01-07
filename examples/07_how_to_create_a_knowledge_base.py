@@ -144,26 +144,44 @@ class BedrockKBAgent():
                 break
             else:
                 time.sleep(2)
+    def retrieve_from_kb(self,kb_id,query):
+        client = self._return_aws_service_client(run_time=True)
+        response = client.retrieve(
+            knowledgeBaseId=kb_id,
+            retrievalQuery={
+                'text': query
+            },
+            retrievalConfiguration={
+                'vectorSearchConfiguration': {
+                    'numberOfResults': 2
+                }
+            },
+            nextToken='loan'
+        )
 
+        print(response)
+
+        return response
 
 
 if __name__ == "__main__":
     kb = BedrockKBAgent()
-    response_kb = kb.create_kb(kb_name="bedrock-ra-01",
-                  role_arn="arn:aws:iam::643045476917:role/AmazonBedrockExecutionRoleForKnowledgeBase_123023",
-                  collection_arn="arn:aws:aoss:us-east-1:643045476917:collection/anddc4hozkwk6bnbzkd5",
-                  index_name="bedrock-index-01")
-
-    print(response_kb)
-
-    kb_id = response_kb["knowledgeBase"]["knowledgeBaseId"]
-
-    response_ds = kb.create_ds(knowledge_base_id=kb_id,
-                               bucket_arn="arn:aws:s3:::bedrock-agent01")
-    print(response_ds)
-
-    ds_id = response_ds["dataSource"]["dataSourceId"]
-
-    kb.start_ingestion_job(kb_id=kb_id,
-                           ds_id=ds_id)
-
+    # response_kb = kb.create_kb(kb_name="bedrock-ra-01",
+    #               role_arn="arn:aws:iam::643045476917:role/AmazonBedrockExecutionRoleForKnowledgeBase_123023",
+    #               collection_arn="arn:aws:aoss:us-east-1:643045476917:collection/anddc4hozkwk6bnbzkd5",
+    #               index_name="bedrock-index-01")
+    #
+    # print(response_kb)
+    #
+    # kb_id = response_kb["knowledgeBase"]["knowledgeBaseId"]
+    #
+    # response_ds = kb.create_ds(knowledge_base_id=kb_id,
+    #                            bucket_arn="arn:aws:s3:::bedrock-agent01")
+    # print(response_ds)
+    #
+    # ds_id = response_ds["dataSource"]["dataSourceId"]
+    #
+    # kb.start_ingestion_job(kb_id=kb_id,
+    #                        ds_id=ds_id)
+    query="What is the loan amount?"
+    response = kb.retrieve_from_kb("VAR6QOX2RZ",query)
