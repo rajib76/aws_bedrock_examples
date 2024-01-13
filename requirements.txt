@@ -3,3 +3,6 @@ botocore==1.33.8
 python-dotenv~=1.0.0
 openai==0.28.1
 opensearch-py
+langchain
+faiss-cpu
+pypdf
