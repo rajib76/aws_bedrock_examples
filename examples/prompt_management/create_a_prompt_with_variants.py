@@ -32,6 +32,7 @@ response = client.create_prompt(
             "name": "claude_sonnet",
             "modelId": "anthropic.claude-3-sonnet-20240229-v1:0",
             "templateType": "CHAT",
+            "additionalModelRequestFields": {'top_k': 250.0},
             "inferenceConfiguration": {
                 "text": {
                     "temperature": 0.8,
